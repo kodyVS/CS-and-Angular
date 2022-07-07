@@ -5,7 +5,6 @@
 /tmp
 /out-tsc
 /bazel-out
-
 # Node
 /node_modules
 npm-debug.log
@@ -29,6 +28,7 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
+ssl
 /.angular/cache
 .sass-cache/
 /connect.lock

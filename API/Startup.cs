@@ -23,7 +23,7 @@ namespace API
         public Startup(IConfiguration config)
         {
             _config = config;
-     
+
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -33,6 +33,16 @@ namespace API
             {
                 options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
             });
+            // CORS NOT WORKING!!!!
+            services.AddCors(options =>
+    {
+        options.AddPolicy("AllowConfiguredOrigins", builder => builder
+            .WithOrigins("http://localhost:4200", "https://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()
+        );
+    });
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -50,10 +60,14 @@ namespace API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
             }
 
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:4200");
+                await next();
+            });
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
+            app.UseCors("AllowConfiguredOrigins");
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

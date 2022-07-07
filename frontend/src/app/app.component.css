@@ -1,0 +1,9 @@
+li {
+    font-size: 30px;
+    font-weight: 600;
+    text-decoration: none;
+    list-style: none;
+    background: linear-gradient(#e66465, #9198e5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
