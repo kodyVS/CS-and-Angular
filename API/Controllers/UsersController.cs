@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,12 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    // Boilerplate for API controllers
-    [ApiController]
-    //Route that goes to this controller I.E https://localhost:5001/api/users. users comes from the Name of the route
-    [Route("api/[controller]")]
-    // We make a class called UsersController that inherits ControllerBase which uses the AspNetCore. 
-    public class UsersController : ControllerBase
+    public class UsersController : BaseApiController
     {
         // A DataContext variable set by the constuctor. This Variable holds the information required to make databse connections
         private readonly DataContext _context;
@@ -26,6 +22,7 @@ namespace API.Controllers
             _context = context;
         }
         // Uses the attribute HttpGet and this will forward the get request to our route to this method
+        [AllowAnonymous]
         [HttpGet]
         // We use type IEnumerable to get a list of Users. We use IEnumerable since it is less heavy than the list type.
         public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
@@ -38,6 +35,7 @@ namespace API.Controllers
             return users;
         }
         // api/users/3
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<AppUser>> GetUser(int id)
         {
